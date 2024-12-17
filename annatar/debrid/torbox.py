@@ -30,7 +30,7 @@ class HttpResponse(BaseModel):
 
 
 class TorBoxProvider(DebridService):
-    BASE_URL = "https://api.torbox.app/v1/api/"
+    BASE_URL = "https://api.torbox.app/v1/api"
 
     async def make_request(
         self,
@@ -59,17 +59,13 @@ class TorBoxProvider(DebridService):
             )
 
     async def get_cached_torrents(self, info_hashes: list[str]) -> list[CachedMagnet]:
-        form = aiohttp.FormData(quote_fields=False)
-        for info_hash in info_hashes:
-            form.add_field("hash", info_hash)
-        form.add_field("list_files", "true")
-        form.add_field("format", "list")
+        form = {"hash": ','.join(info_hashes), "list_files": "true", "format": "list"}
 
-        log.debug("getting cached torrents", info_hashes=form._fields)
+        log.debug("getting cached torrents", info_hashes=form["hash"])
         response = await self.make_request(
             method="GET",
             url="/torrents/checkcached",
-            form=form,
+            query=form,
         )
         if response is None:
             log.info("no response from torbox")
