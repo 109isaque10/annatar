@@ -59,6 +59,8 @@ class TorBoxProvider(DebridService):
             )
 
     async def get_cached_torrents(self, info_hashes: list[str]) -> list[CachedMagnet]:
+        if not info_hashes:
+            return []
         form = {"hash": ','.join(info_hashes), "list_files": "true", "format": "list"}
 
         log.debug("getting cached torrents", info_hashes=form["hash"])

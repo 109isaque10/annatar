@@ -10,8 +10,8 @@ services:
     build: .
     ports:
       - "7650:7650"
-    depends_on:
-      - jackett
+    #depends_on:
+     # - jackett
     volumes:
       - "redis_data:/app/data"
     environment:
