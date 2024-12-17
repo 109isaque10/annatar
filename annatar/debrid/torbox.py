@@ -65,22 +65,11 @@ class TorBoxProvider(DebridService):
         form = {"hash": ','.join(info_hashes), "list_files": "true", "format": "list"}
 
         log.debug("getting cached torrents", info_hashes=form["hash"])
-        max_retries = 3
-        response = None
-        for attempt in range(max_retries):
-            try:
-                response = await self.make_request(
-                    method="GET",
-                    url="/torrents/checkcached",
-                    query=form,
-                )
-                if response is not None:
-                    break
-            except aiohttp.ClientError as e:
-                log.warning("request failed", attempt=attempt + 1, error=str(e))
-                if attempt == max_retries - 1:
-                    return []
-                await asyncio.sleep(1)
+        response = await self.make_request(
+            method="GET",
+            url="/torrents/checkcached",
+            query=form,
+        )
         if response is None:
             log.info("no response from torbox")
             return []
