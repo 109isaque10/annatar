@@ -42,21 +42,22 @@ class TorBoxProvider(DebridService):
     ) -> HttpResponse | None:
         query = query or {}
         log.debug("making request", method=method, url=url, query=query, body=body, form=form)
-        async with aiohttp.ClientSession() as session, session.request(
-            method,
-            f"{self.BASE_URL}{url}",
-            params=query,
-            json=body,
-            data=form,
-            headers={"Authorization": f"Bearer {self.api_key}"},
-        ) as response:
-            response.raise_for_status()
-            return HttpResponse(
-                status=response.status,
-                headers=list(response.headers.items()),
-                response_json=await response.json(),
-                response_text=await response.text(),
-            )
+        async with aiohttp.ClientSession() as session:
+            session.headers["Authorization"] = f"Bearer {self.api_key}"
+            async with session.request(
+                method,
+                f"{self.BASE_URL}{url}",
+                params=query,
+                json=body,
+                data=form,
+            ) as response:
+                response.raise_for_status()
+                return HttpResponse(
+                    status=response.status,
+                    headers=list(response.headers.items()),
+                    response_json=await response.json(),
+                    response_text=await response.text(),
+                )
 
     async def get_cached_torrents(self, info_hashes: list[str]) -> list[CachedMagnet]:
         if not info_hashes:
