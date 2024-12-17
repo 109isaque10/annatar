@@ -8,19 +8,20 @@ services:
   annatar:
     image: registry.gitlab.com/stremio-add-ons/annatar:latest
     ports:
-      - "8000:8000"
+      - "7650:7650"
     depends_on:
       - jackett
     volumes:
       - "redis_data:/app/data"
     environment:
       LOG_LEVEL: debug
+      BUILD_VERSION: "1.0.0"
       JACKETT_URL: "http://jackett:9117"
-      JACKETT_API_KEY: "<Set this value from Jackett>"
+      JACKETT_API_KEY: ""
       JACKETT_MAX_RESULTS: "100" # max results from jackett search
-      JACKETT_TIMEOUT: "60" # max time spent searching per indexer.
-      JACKETT_INDEXERS: "yts,eztv,kickasstorrents-ws,thepiratebay,therarbg,torrentgalaxy,bitsearch,limetorrents,badasstorrents"
-      LISTEN_PORT: "8000"
+      JACKETT_TIMEOUT: "30" # max time spent searching per indexer.
+      #JACKETT_INDEXERS: "yts,eztv,kickasstorrents-ws,thepiratebay,therarbg,torrentgalaxy,bitsearch,limetorrents,badasstorrents"
+      LISTEN_PORT: "7650"
 
   jackett:
     image: docker.io/linuxserver/jackett

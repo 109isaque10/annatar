@@ -7,7 +7,7 @@ class HTTPError(BaseModel):
 
 
 class CachedFile(BaseModel):
-    name = Field(alias="name")
+    name = str(Field(alias="name"))
     name = name.split("/")[-1]
     name: str = name
     size: int
