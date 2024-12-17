@@ -11,7 +11,7 @@ from annatar.api.filters import by_id as filter_by_id
 
 log = structlog.get_logger()
 DEFAULT_INDEXERS = (
-    "comando,bludv,amigos_share_club"
+    "amigosshare"
 )
 
 

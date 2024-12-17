@@ -133,7 +133,7 @@ class BaseJackettProcessor(BaseModel):
             score -= 1
         if request.season and f"s{request.season:02d}" in result.Title.lower():
             score -= 1
-        if request.season and rangematch is not None:
+        if request.season and len(rangematch) > 0:
             if int(rangematch[0]) >= request.season:
                 score -= 1
         if 'complet' in ltitle:
