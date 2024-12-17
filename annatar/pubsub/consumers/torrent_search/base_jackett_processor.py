@@ -3,6 +3,7 @@ import os
 from itertools import chain
 
 import structlog
+import re
 from pydantic import BaseModel
 
 from annatar.clients import jackett
@@ -96,6 +97,18 @@ class BaseJackettProcessor(BaseModel):
                     timeout=JACKETT_TIMEOUT,
                 )
             )
+            tasks.append(jackett.search(
+                query=f"{media_info.name} S01-",
+                indexers=[self.indexer],
+                category=request.category,
+                timeout=JACKETT_TIMEOUT,
+            ))
+            tasks.append(jackett.search(
+                query=f"{media_info.name} Complet",
+                indexers=[self.indexer],
+                category=request.category,
+                timeout=JACKETT_TIMEOUT,
+            ))
 
         results = list(
             chain.from_iterable(
@@ -114,9 +127,16 @@ class BaseJackettProcessor(BaseModel):
         self, media_info: MediaInfo, request: SearchRequest, result: SearchResult
     ) -> tuple[int, int]:
         score = 5
-        if TorrentMeta.parse_title(result.Title).matches_name(media_info.name):
+        ltitle = result.Title.lower()
+        rangematch = re.search(r"s01-.?(\d{2})", ltitle)
+        if TorrentMeta.parse_title(ltitle).matches_name(media_info.name):
             score -= 1
-        if request.season and f"S{request.season:02d}" in result.Title:
+        if request.season and f"s{request.season:02d}" in result.Title.lower():
+            score -= 1
+        if request.season and rangematch is not None:
+            if int(rangematch.group(0)) >= request.season:
+                score -= 1
+        if 'complet' in ltitle:
             score -= 1
         if request.imdb and result.Imdb and f"tt{result.Imdb:07d}" == request.imdb:
             score -= 1

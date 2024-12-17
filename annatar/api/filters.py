@@ -94,25 +94,17 @@ ALL = (
         ),
     ]
     + [
-        # Languages
-        # Filter(
-        #     id=lang,
-        #     name=lang,
-        #     category="Language",
-        #     apply=lambda meta: lang in [lang.lower() for lang in meta.language],
-        # )
-        # for lang in [
-        #     "English",
-        #     "French",
-        #     "German",
-        #     "Italian",
-        #     "Japanese",
-        #     "Korean",
-        #     "Mandarin",
-        #     "Russian",
-        #     "Spanish",
-        #     "Hindi",
-        # ]
+         # Languages
+         Filter(
+             id=lang,
+             name=lang,
+             category="Language",
+             apply=lambda meta: lang in [lang.lower() for lang in meta.language],
+         )
+         for lang in [
+             "English",
+             "Portuguese"
+         ]
     ]
 )
 

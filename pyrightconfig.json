@@ -1,3 +1,4 @@
 {
-    "extraPaths": ["./typings"]
+    "extraPaths": ["./typings"],
+    "reportMissingImports": false
 }

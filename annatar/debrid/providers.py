@@ -5,12 +5,14 @@ from annatar.debrid.debrid_service import DebridService
 from annatar.debrid.debridlink import DebridLink
 from annatar.debrid.premiumize_provider import PremiumizeProvider
 from annatar.debrid.real_debrid_provider import RealDebridProvider
+from annatar.debrid.torbox import TorBoxProvider
 
 _providers: list[DebridService] = [
     RealDebridProvider(api_key="", source_ip=""),
     PremiumizeProvider(api_key="", source_ip=""),
     DebridLink(api_key="", source_ip=""),
     AllDebridProvider(api_key="", source_ip=""),
+    TorBoxProvider(api_key="", source_ip=""),
 ]
 
 
