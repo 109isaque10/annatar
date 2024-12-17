@@ -128,7 +128,7 @@ class BaseJackettProcessor(BaseModel):
     ) -> tuple[int, int]:
         score = 5
         ltitle = result.Title.lower()
-        rangematch = re.findall(r"s01-.?(\d.{2})", ltitle)
+        rangematch = re.findall(r"s01-s?(\d{2})", ltitle)
         if TorrentMeta.parse_title(ltitle).matches_name(media_info.name):
             score -= 1
         if request.season and f"s{request.season:02d}" in result.Title.lower():
